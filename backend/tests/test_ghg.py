@@ -1,4 +1,4 @@
-from app.calculations.ghg import ghg_intensity, ghg_savings_pct, tco2e_saved
+from app.calculations.ghg import ghg_intensity, ghg_savings_pct
 
 
 def test_ghg_intensity_sums_annex_v_terms():
@@ -12,9 +12,3 @@ def test_ghg_savings_pct_against_fossil_comparator():
     savings = ghg_savings_pct(13.0, fossil_comparator=94.0)
     assert savings == round((1 - 13.0 / 94.0) * 100, 2)
     assert 85.0 < savings < 87.0
-
-
-def test_tco2e_saved_scales_with_volume():
-    small = tco2e_saved(1000, intensity=13.0, fossil_comparator=94.0)
-    large = tco2e_saved(10000, intensity=13.0, fossil_comparator=94.0)
-    assert large == round(small * 10, 3)

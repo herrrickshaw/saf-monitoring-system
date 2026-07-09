@@ -42,13 +42,15 @@ def _row_for(delivery: AirlineDelivery) -> list:
         f"{delivery.volume_liters:,.0f} L",
         f"{cert.ghg_intensity:.1f}" if cert else "n/a",
         f"{cert.ghg_savings_pct:.1f}%" if cert else "n/a",
+        f"{cert.corsia_reduction_pct:.1f}%" if cert else "n/a",
         f"{delivery.credit_ledger.tco2e_saved:.2f}" if delivery.credit_ledger else "n/a",
     ]
 
 
 HEADERS = [
     "Delivery Date", "Batch Code", "Feedstock", "ASTM Pathway", "Blend Ratio",
-    "Volume", "GHG Intensity (gCO2eq/MJ)", "GHG Savings %", "tCO2e Credited",
+    "Volume", "RED III GHG Intensity (gCO2eq/MJ)", "RED III GHG Savings %",
+    "CORSIA Reduction %", "tCO2e Credited (CORSIA)",
 ]
 
 

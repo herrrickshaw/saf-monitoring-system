@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from ..calculations.corsia import credit_for_delivery
+from ..calculations.corsia import CORSIA_MIN_REDUCTION_PCT, credit_for_delivery
 from ..db import get_db
 from ..models import AirlineDelivery, CarbonCreditLedger
 from ..schemas.carbon_credits import CarbonCreditLedgerOut
@@ -24,8 +24,14 @@ def generate_ledger_entry(airline_delivery_id: int, db: Session = Depends(get_db
     certificate = delivery.batch.certificate
     if not certificate:
         raise HTTPException(400, "Batch has no SAF certificate yet -- generate one first")
+    if not certificate.corsia_eligible:
+        raise HTTPException(
+            400,
+            f"Batch does not meet the CORSIA {CORSIA_MIN_REDUCTION_PCT}% minimum lifecycle "
+            f"GHG reduction (actual: {certificate.corsia_reduction_pct}%) -- not eligible for credit",
+        )
 
-    tco2e = credit_for_delivery(delivery.volume_liters, certificate.ghg_intensity, certificate.fossil_comparator)
+    tco2e = credit_for_delivery(delivery.volume_liters, certificate.corsia_lcef)
     entry = CarbonCreditLedger(airline_delivery_id=delivery.id, tco2e_saved=tco2e)
     db.add(entry)
     db.commit()

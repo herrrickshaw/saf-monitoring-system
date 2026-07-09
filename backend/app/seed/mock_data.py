@@ -10,7 +10,7 @@ from dateutil.relativedelta import relativedelta
 from sqlalchemy.orm import Session
 
 from ..calculations.astm_pathways import PATHWAYS, is_conformant
-from ..calculations.corsia import credit_for_delivery, is_corsia_eligible
+from ..calculations.corsia import credit_for_delivery, default_core_lca_value, is_corsia_eligible, lcef, reduction_pct
 from ..calculations.ghg import FOSSIL_COMPARATOR_GCO2_PER_MJ, ghg_intensity, ghg_savings_pct
 from ..models import (
     ASTMPathway,
@@ -33,6 +33,9 @@ FEEDSTOCKS = [
         "default_ep": 10.0,
         "default_etd": 2.0,
         "pathway_code": "HEFA-SPK",
+        # ICAO Table 2.6 (waste feedstock -> ILUC 0)
+        "corsia_feedstock_key": "used_cooking_oil",
+        "corsia_iluc_value": 0.0,
     },
     {
         "name": "Animal Fat (Tallow)",
@@ -42,6 +45,9 @@ FEEDSTOCKS = [
         "default_ep": 12.0,
         "default_etd": 3.0,
         "pathway_code": "HEFA-SPK",
+        # ICAO Table 2.1 (waste feedstock -> ILUC 0)
+        "corsia_feedstock_key": "tallow",
+        "corsia_iluc_value": 0.0,
     },
     {
         "name": "Corn Stover Residue",
@@ -51,6 +57,9 @@ FEEDSTOCKS = [
         "default_ep": 15.0,
         "default_etd": 4.0,
         "pathway_code": "ATJ-SPK",
+        # ICAO Table 3.1, ATJ-SPK from isobutanol (agricultural residue -> ILUC 0)
+        "corsia_feedstock_key": "agricultural_residues_isobutanol",
+        "corsia_iluc_value": 0.0,
     },
 ]
 
@@ -123,6 +132,11 @@ def seed_if_empty(db: Session) -> None:
                 eec=feedstock.default_eec, el=0.0, ep=batch.process_emissions_ep, etd=feedstock.default_etd
             )
             savings_pct = ghg_savings_pct(intensity, FOSSIL_COMPARATOR_GCO2_PER_MJ)
+
+            core_lca = default_core_lca_value(pathway.code, feedstock.corsia_feedstock_key)
+            batch_lcef = lcef(core_lca, feedstock.corsia_iluc_value)
+            corsia_pct = reduction_pct(batch_lcef)
+
             certificate = SAFCertificate(
                 production_batch_id=batch.id,
                 ghg_intensity=intensity,
@@ -130,7 +144,10 @@ def seed_if_empty(db: Session) -> None:
                 fossil_comparator=FOSSIL_COMPARATOR_GCO2_PER_MJ,
                 eligible_feedstock=feedstock.category != "CROP",
                 astm_conformant=is_conformant(pathway.max_blend_pct, blend_ratio_pct, batch.lab_certification_ref),
-                corsia_eligible=is_corsia_eligible(savings_pct),
+                corsia_core_lca_value=core_lca,
+                corsia_lcef=batch_lcef,
+                corsia_reduction_pct=corsia_pct,
+                corsia_eligible=is_corsia_eligible(corsia_pct),
             )
             db.add(certificate)
             batches.append(batch)
@@ -164,7 +181,7 @@ def seed_if_empty(db: Session) -> None:
         db.flush()
 
         certificate = batch.certificate
-        tco2e = credit_for_delivery(volume, certificate.ghg_intensity, certificate.fossil_comparator)
+        tco2e = credit_for_delivery(volume, certificate.corsia_lcef)
         db.add(CarbonCreditLedger(airline_delivery_id=delivery.id, tco2e_saved=tco2e))
 
     # Blending compliance: EDDF compliant, EGLL deliberately short of mandate this year.

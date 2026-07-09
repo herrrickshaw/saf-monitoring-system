@@ -10,6 +10,8 @@ class FeedstockCreate(BaseModel):
     default_eec: float = 0.0
     default_ep: float = 0.0
     default_etd: float = 0.0
+    corsia_feedstock_key: str = ""
+    corsia_iluc_value: float = 0.0
 
 
 class FeedstockOut(FeedstockCreate):

@@ -19,8 +19,27 @@ CORSIA rules before using this system for real compliance reporting.**
   share by year
 - `backend/app/calculations/astm_pathways.py` — ASTM D7566 approved conversion pathways and
   their certified max blend ratios
-- `backend/app/calculations/corsia.py` — CORSIA eligibility threshold and tCO2e credit
-  conversion
+- `backend/app/calculations/corsia.py` — CORSIA L_CEF methodology, the 89 gCO2e/MJ baseline,
+  the 10% minimum-reduction eligibility threshold (Annex 16 Vol IV, Sustainability Criterion
+  1.1), and ICAO's published default Core LCA values by feedstock/pathway, sourced from the
+  ICAO "CORSIA Default Life Cycle Emissions Values for CORSIA Eligible Fuels" document
+  (8th Edition, 19 Nov 2025): https://www.icao.int/CORSIA/corsia-eligible-fuels
+
+### RED III vs CORSIA — two distinct comparators
+
+These are separate regulatory regimes with different baselines and are **not**
+interchangeable:
+
+| | RED III / ReFuelEU (EU) | CORSIA (ICAO) |
+|---|---|---|
+| Baseline | 94 gCO2eq/MJ | 89 gCO2e/MJ |
+| Metric | `ghg_intensity` / `ghg_savings_pct` on `SAFCertificate` | `corsia_lcef` / `corsia_reduction_pct` |
+| Eligibility | feeds ReFuelEU blending-mandate compliance | ≥10% reduction (`corsia_eligible`) |
+| Feeds | `BlendingRecord` compliance flag | `CarbonCreditLedger` tCO2e credits |
+
+The carbon-credit ledger (`CarbonCreditLedger.tco2e_saved`) is computed against the
+CORSIA baseline/L_CEF, not the RED III intensity — a batch must be `corsia_eligible`
+before a credit entry can be generated for it.
 
 ## Architecture
 

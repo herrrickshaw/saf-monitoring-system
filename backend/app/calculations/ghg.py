@@ -27,13 +27,9 @@ def ghg_intensity(
 
 
 def ghg_savings_pct(intensity: float, fossil_comparator: float = FOSSIL_COMPARATOR_GCO2_PER_MJ) -> float:
+    """% GHG savings for ReFuelEU/RED III reporting. Note: CORSIA eligibility and
+    the tCO2e credit ledger use the separate CORSIA baseline/methodology in
+    calculations/corsia.py (89 gCO2e/MJ), not this RED III comparator (94)."""
     if fossil_comparator <= 0:
         return 0.0
     return round((1 - intensity / fossil_comparator) * 100, 2)
-
-
-def tco2e_saved(volume_liters: float, intensity: float, fossil_comparator: float = FOSSIL_COMPARATOR_GCO2_PER_MJ) -> float:
-    """Emissions reduction credited for a delivered volume, tCO2e."""
-    mj = volume_liters * SAF_ENERGY_DENSITY_MJ_PER_L
-    saved_g = mj * (fossil_comparator - intensity)
-    return round(saved_g / 1_000_000, 3)

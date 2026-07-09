@@ -21,11 +21,13 @@ export default function Certificates() {
 
   const columns = [
     { key: "production_batch_id", label: "Batch", render: (r) => batchCode(r.production_batch_id) },
-    { key: "ghg_intensity", label: "GHG Intensity (gCO2eq/MJ)", render: (r) => r.ghg_intensity.toFixed(2) },
-    { key: "ghg_savings_pct", label: "GHG Savings %", render: (r) => `${r.ghg_savings_pct}%` },
+    { key: "ghg_intensity", label: "RED III GHG Intensity (gCO2eq/MJ)", render: (r) => r.ghg_intensity.toFixed(2) },
+    { key: "ghg_savings_pct", label: "RED III GHG Savings %", render: (r) => `${r.ghg_savings_pct}%` },
+    { key: "corsia_lcef", label: "CORSIA L_CEF (gCO2e/MJ)", render: (r) => r.corsia_lcef.toFixed(2) },
+    { key: "corsia_reduction_pct", label: "CORSIA Reduction %", render: (r) => `${r.corsia_reduction_pct}%` },
     { key: "eligible_feedstock", label: "RED Eligible Feedstock", render: (r) => flag(r.eligible_feedstock) },
     { key: "astm_conformant", label: "ASTM D7566 Conformant", render: (r) => flag(r.astm_conformant) },
-    { key: "corsia_eligible", label: "CORSIA Eligible", render: (r) => flag(r.corsia_eligible) },
+    { key: "corsia_eligible", label: "CORSIA Eligible (≥10%)", render: (r) => flag(r.corsia_eligible) },
   ];
 
   return (

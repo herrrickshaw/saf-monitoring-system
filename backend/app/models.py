@@ -26,6 +26,11 @@ class Feedstock(Base):
     default_eec: Mapped[float] = mapped_column(Float, default=0.0)
     default_ep: Mapped[float] = mapped_column(Float, default=0.0)
     default_etd: Mapped[float] = mapped_column(Float, default=0.0)
+    # CORSIA: key into calculations.corsia.DEFAULT_CORE_LCA_VALUES (with the
+    # batch's ASTM pathway code); ILUC is 0 for waste/residue/by-product
+    # feedstocks (ICAO default), non-zero only for main/primary products.
+    corsia_feedstock_key: Mapped[str] = mapped_column(String, default="")
+    corsia_iluc_value: Mapped[float] = mapped_column(Float, default=0.0)
 
     deliveries: Mapped[list["FeedstockDelivery"]] = relationship(back_populates="feedstock")
 
@@ -76,11 +81,16 @@ class SAFCertificate(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     production_batch_id: Mapped[int] = mapped_column(ForeignKey("production_batches.id"), unique=True)
+    # RED III / ReFuelEU (EU comparator, 94 gCO2eq/MJ)
     ghg_intensity: Mapped[float] = mapped_column(Float)
     ghg_savings_pct: Mapped[float] = mapped_column(Float)
     fossil_comparator: Mapped[float] = mapped_column(Float, default=94.0)
     eligible_feedstock: Mapped[bool] = mapped_column(Boolean)
     astm_conformant: Mapped[bool] = mapped_column(Boolean)
+    # CORSIA (ICAO baseline, 89 gCO2e/MJ) -- see calculations/corsia.py
+    corsia_core_lca_value: Mapped[float] = mapped_column(Float, default=0.0)
+    corsia_lcef: Mapped[float] = mapped_column(Float, default=0.0)
+    corsia_reduction_pct: Mapped[float] = mapped_column(Float, default=0.0)
     corsia_eligible: Mapped[bool] = mapped_column(Boolean)
     issued_date: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
