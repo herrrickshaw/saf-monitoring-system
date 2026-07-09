@@ -41,6 +41,26 @@ The carbon-credit ledger (`CarbonCreditLedger.tco2e_saved`) is computed against 
 CORSIA baseline/L_CEF, not the RED III intensity — a batch must be `corsia_eligible`
 before a credit entry can be generated for it.
 
+### India CCTS / Indian Carbon Market — forward-compatible, not yet active
+
+`backend/app/calculations/ccts_icm.py` implements the accounting mechanics of India's
+domestic **Carbon Credit Trading Scheme (CCTS)** / **Indian Carbon Market (ICM)**, run by
+the Bureau of Energy Efficiency (BEE) under the Energy Conservation (Amendment) Act, 2022:
+1 Carbon Credit Certificate (CCC) = 1 tCO2e, with obligated entities earning surplus CCCs
+for beating their GHG emission-intensity target and owing CCCs for missing it.
+
+**SAF/aviation fuel production is not yet a notified CCTS sector** (Compliance Mechanism
+covers Aluminium, Chlor Alkali, Cement, Fertiliser, Iron & Steel, Pulp & Paper,
+Petrochemicals, Petroleum Refinery, Textile; Offset Mechanism Phase I/II covers Energy,
+Industries, Agriculture, Waste handling, Forestry, Transport, Fugitive emissions,
+Construction, Solvent use, Carbon capture/storage/removal — no aviation category yet).
+This module is built ahead of that notification so the platform is ready the moment BEE
+extends CCTS to SAF: `GET /api/compliance/ccts-icm/status` reports current coverage, and
+`POST /api/compliance/ccts-icm/estimate` runs a what-if CCC surplus/deficit calculation
+(informational only, since no official target intensity exists yet). Flip
+`SAF_SECTOR_NOTIFIED` in `ccts_icm.py` once BEE publishes one. Source:
+https://beeindia.gov.in
+
 ## Architecture
 
 ```

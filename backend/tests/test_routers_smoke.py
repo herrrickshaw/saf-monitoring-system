@@ -64,3 +64,22 @@ def test_airline_report_download(client):
     assert r.status_code == 200
     assert r.headers["content-type"] == "application/pdf"
     assert len(r.content) > 500
+
+
+def test_ccts_icm_status(client):
+    r = client.get("/api/compliance/ccts-icm/status")
+    assert r.status_code == 200
+    body = r.json()
+    assert body["saf_sector_notified"] is False
+    assert len(body["compliance_mechanism_sectors"]) == 9
+
+
+def test_ccts_icm_estimate(client):
+    r = client.post(
+        "/api/compliance/ccts-icm/estimate",
+        json={"actual_intensity_tco2e_per_unit": 1.0, "target_intensity_tco2e_per_unit": 1.5, "output_units": 1000},
+    )
+    assert r.status_code == 200
+    body = r.json()
+    assert body["surplus_deficit_tco2e"] == 500.0
+    assert body["is_surplus"] is True

@@ -82,3 +82,11 @@ export function fetchBlendingCompliance(airport, year) {
   const qs = params.toString();
   return apiFetch(`/compliance/blending${qs ? `?${qs}` : ""}`);
 }
+
+export function fetchCCTSStatus() {
+  return apiFetch("/compliance/ccts-icm/status");
+}
+
+export function estimateCCTS(payload) {
+  return apiFetch("/compliance/ccts-icm/estimate", { method: "POST", body: JSON.stringify(payload) });
+}

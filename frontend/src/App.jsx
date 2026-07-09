@@ -5,6 +5,7 @@ import CarbonCredits from "./pages/CarbonCredits";
 import Certificates from "./pages/Certificates";
 import Dashboard from "./pages/Dashboard";
 import FeedstockArrivals from "./pages/FeedstockArrivals";
+import IndiaCCTS from "./pages/IndiaCCTS";
 import ProductionBatches from "./pages/ProductionBatches";
 
 const VIEWS = [
@@ -15,6 +16,7 @@ const VIEWS = [
   { key: "credits", label: "Carbon Credits", component: CarbonCredits },
   { key: "airlines", label: "Airline Reporting", component: AirlineReporting },
   { key: "blending", label: "Blending Compliance", component: BlendingCompliance },
+  { key: "ccts", label: "India CCTS/ICM", component: IndiaCCTS },
 ];
 
 export default function App() {
