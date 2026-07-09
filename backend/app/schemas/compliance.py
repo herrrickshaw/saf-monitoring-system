@@ -36,3 +36,29 @@ class CCTSEstimateOut(BaseModel):
     ccc_equivalent: float
     is_surplus: bool
     note: str
+
+
+class BioCarbonFeedstockRow(BaseModel):
+    key: str
+    label: str
+    credit_factor_tco2e_per_tonne: float
+    reference_capacity_tpd: float
+    reference_credit_per_year: float
+
+
+class BioCarbonTableOut(BaseModel):
+    operating_days_per_year: int
+    rows: list[BioCarbonFeedstockRow]
+    note: str
+
+
+class BioCarbonEstimateRequest(BaseModel):
+    feedstock_key: str
+    capacity_tpd: float
+
+
+class BioCarbonEstimateOut(BaseModel):
+    feedstock_key: str
+    capacity_tpd: float
+    credit_per_year_tco2e: float
+    note: str

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import AirlineReporting from "./pages/AirlineReporting";
+import BioCarbonEstimator from "./pages/BioCarbonEstimator";
 import BlendingCompliance from "./pages/BlendingCompliance";
 import CarbonCredits from "./pages/CarbonCredits";
 import Certificates from "./pages/Certificates";
@@ -17,6 +18,7 @@ const VIEWS = [
   { key: "airlines", label: "Airline Reporting", component: AirlineReporting },
   { key: "blending", label: "Blending Compliance", component: BlendingCompliance },
   { key: "ccts", label: "India CCTS/ICM", component: IndiaCCTS },
+  { key: "biocarbon", label: "Bio-Carbon Estimator", component: BioCarbonEstimator },
 ];
 
 export default function App() {

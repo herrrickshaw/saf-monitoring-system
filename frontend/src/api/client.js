@@ -90,3 +90,11 @@ export function fetchCCTSStatus() {
 export function estimateCCTS(payload) {
   return apiFetch("/compliance/ccts-icm/estimate", { method: "POST", body: JSON.stringify(payload) });
 }
+
+export function fetchBioCarbonTable() {
+  return apiFetch("/compliance/bio-carbon/table");
+}
+
+export function estimateBioCarbonCredit(payload) {
+  return apiFetch("/compliance/bio-carbon/estimate", { method: "POST", body: JSON.stringify(payload) });
+}

@@ -83,3 +83,22 @@ def test_ccts_icm_estimate(client):
     body = r.json()
     assert body["surplus_deficit_tco2e"] == 500.0
     assert body["is_surplus"] is True
+
+
+def test_bio_carbon_table(client):
+    r = client.get("/api/compliance/bio-carbon/table")
+    assert r.status_code == 200
+    body = r.json()
+    assert len(body["rows"]) == 10
+    assert all(row["reference_credit_per_year"] > 0 for row in body["rows"])
+
+
+def test_bio_carbon_estimate(client):
+    r = client.post("/api/compliance/bio-carbon/estimate", json={"feedstock_key": "agri_waste", "capacity_tpd": 200})
+    assert r.status_code == 200
+    assert r.json()["credit_per_year_tco2e"] == 21000.0
+
+
+def test_bio_carbon_estimate_unknown_feedstock(client):
+    r = client.post("/api/compliance/bio-carbon/estimate", json={"feedstock_key": "unobtainium", "capacity_tpd": 100})
+    assert r.status_code == 400
