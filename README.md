@@ -1,5 +1,7 @@
 # SAF Monitoring System
 
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/herrrickshaw/saf-monitoring-system/blob/main/notebooks/colab_test.ipynb)
+
 A compliance monitoring platform for Sustainable Aviation Fuel (SAF) plant and supply-chain
 operations: feedstock arrival tracking, production batch linkage, GHG intensity calculation,
 ASTM D7566 pathway conformance, ReFuelEU Aviation blending-mandate compliance, CORSIA carbon
