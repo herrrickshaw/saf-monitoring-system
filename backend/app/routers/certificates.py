@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from ..calculations.astm_pathways import is_conformant
-from ..calculations.corsia import default_core_lca_value, is_corsia_eligible, lcef, reduction_pct
+from ..calculations.corsia import default_core_lca_value, is_corsia_eligible, lcef, reduction_pct, resolve_iluc
 from ..calculations.ghg import FOSSIL_COMPARATOR_GCO2_PER_MJ, ghg_intensity, ghg_savings_pct
 from ..db import get_db
 from ..models import ProductionBatch, SAFCertificate
@@ -47,7 +47,15 @@ def generate_certificate(batch_id: int, db: Session = Depends(get_db)):
             "emissions value per the ICAO 'CORSIA Methodology for Calculating Actual Life "
             "Cycle Emissions Values' instead, or set a matching corsia_feedstock_key.",
         )
-    batch_lcef = lcef(core_lca, feedstock.corsia_iluc_value)
+    iluc = resolve_iluc(batch.astm_pathway.code, feedstock.corsia_feedstock_key, feedstock.corsia_iluc_value)
+    if iluc is None:
+        raise HTTPException(
+            400,
+            f"Feedstock key '{feedstock.corsia_feedstock_key}' is a crop (main product) with a "
+            "non-zero ICAO default ILUC value that is not carried here. Set corsia_iluc_value "
+            "on the feedstock from the ICAO default ILUC tables for its region.",
+        )
+    batch_lcef = round(lcef(core_lca, iluc), 4)
     corsia_pct = reduction_pct(batch_lcef)
 
     certificate = SAFCertificate(
