@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 
 from ..calculations import biocarbon_estimator, ccts_icm
 from ..calculations.mandate_schedule import mandate_pct_for_year
-from ..db import get_db
+from ..db import get_db, persist
 from ..models import BlendingRecord
 from ..schemas.compliance import (
     BioCarbonEstimateOut,
@@ -51,10 +51,7 @@ def list_blending(
 @router.post("/blending", response_model=BlendingRecordOut)
 def create_blending_record(payload: BlendingRecordCreate, db: Session = Depends(get_db)):
     record = BlendingRecord(**payload.model_dump())
-    db.add(record)
-    db.commit()
-    db.refresh(record)
-    return _to_out(record)
+    return _to_out(persist(db, record))
 
 
 @router.get("/ccts-icm/status", response_model=CCTSStatusOut)

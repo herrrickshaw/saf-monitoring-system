@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from fastapi.responses import StreamingResponse
 from sqlalchemy.orm import Session
 
-from ..db import get_db
+from ..db import get_db, persist
 from ..models import AirlineDelivery, AirlineOfftake, ProductionBatch
 from ..reports.airline_report import build_excel, build_pdf
 from ..schemas.airlines import (
@@ -25,10 +25,7 @@ def list_offtakes(db: Session = Depends(get_db)):
 @router.post("", response_model=AirlineOfftakeOut)
 def create_offtake(payload: AirlineOfftakeCreate, db: Session = Depends(get_db)):
     offtake = AirlineOfftake(**payload.model_dump())
-    db.add(offtake)
-    db.commit()
-    db.refresh(offtake)
-    return offtake
+    return persist(db, offtake)
 
 
 @router.get("/deliveries", response_model=list[AirlineDeliveryOut])
@@ -43,10 +40,7 @@ def create_delivery(payload: AirlineDeliveryCreate, db: Session = Depends(get_db
     if not db.get(ProductionBatch, payload.production_batch_id):
         raise HTTPException(404, "Production batch not found")
     delivery = AirlineDelivery(**payload.model_dump())
-    db.add(delivery)
-    db.commit()
-    db.refresh(delivery)
-    return delivery
+    return persist(db, delivery)
 
 
 @router.get("/{offtake_id}/report")
