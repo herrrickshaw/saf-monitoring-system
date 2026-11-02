@@ -3,15 +3,54 @@
 <!-- how-to-use-with-ai -->
 > **New here?** See [How to use this repo with AI (Claude, Gemini, ChatGPT)](HOW_TO_USE_WITH_AI.md) — clone it, paste it into an AI tool, and ask in plain English.
 
-
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/herrrickshaw/saf-monitoring-system/blob/main/notebooks/colab_test.ipynb)
 
-A compliance monitoring platform for Sustainable Aviation Fuel (SAF) plant and supply-chain
-operations: feedstock arrival tracking, production batch linkage, GHG intensity calculation,
-ASTM D7566 pathway conformance, ReFuelEU Aviation blending-mandate compliance, CORSIA carbon
-credit ledgering, and traceable airline reporting.
+A compliance monitoring platform (FastAPI + React, SQLite) for Sustainable Aviation Fuel plant and
+supply-chain operations. It tracks feedstock arrivals, links them to production batches, computes GHG
+intensity and CORSIA life-cycle values, checks ASTM D7566 pathway conformance and ReFuelEU blending
+mandates, keeps a CORSIA carbon-credit ledger, and produces per-airline PDF/Excel supply reports.
+Runs on seeded mock data out of the box.
 
-## Regulatory Disclaimer
+> Status: active, demonstration-grade. Regulatory values are editable defaults, not legal advice; confirm
+> them against current official sources before any real compliance reporting (see "Regulatory basis").
+
+## What it does
+- Records feedstocks and deliveries, production batches and ASTM pathways (`/api/feedstock`, `/api/production`).
+- Generates a SAF certificate per batch: RED III GHG intensity/savings and CORSIA L_CEF/reduction/eligibility (`/api/certificates`).
+- Ledgers CORSIA tCO2e credits per airline delivery, only for CORSIA-eligible batches (`/api/carbon-credits`).
+- Flags airport-level ReFuelEU blending compliance against the yearly mandate (`/api/compliance/blending`).
+- Estimates India CCTS/ICM surplus or deficit and illustrative bio-carbon credits (`/api/compliance/ccts-icm/*`, `/api/compliance/bio-carbon/*`).
+- Downloads traceable airline reports as PDF or Excel (`/api/airlines/{id}/report`).
+
+## Quick start
+```bash
+git clone https://github.com/herrrickshaw/saf-monitoring-system.git
+cd saf-monitoring-system
+./run_app.sh        # needs Python 3.10+ and Node 18+
+```
+`run_app.sh` creates `backend/.venv`, installs dependencies, starts the API on `:8000`
+(Swagger at `http://localhost:8000/docs`) and the Vite frontend on `:5173`. On first run the backend
+seeds ~12 months of mock data: 3 feedstocks, 36 production batches with certificates, 3 airline offtake
+contracts, a CORSIA credit ledger, and blending records for 3 airports (one deliberately below its
+ReFuelEU mandate to demonstrate the compliance flag).
+
+## How it works
+```
+React (frontend/src/pages) --REST--> FastAPI routers --> calculations (pure) --> SQLAlchemy/SQLite
+```
+| Stage | Module | Output |
+|---|---|---|
+| Persistence | `backend/app/db.py`, `models.py` | SQLite (`SAF_DB_PATH`), `persist()` commit helper |
+| GHG / CORSIA / ASTM / mandate maths | `backend/app/calculations/*.py` | pure functions, no DB or HTTP types |
+| Certificate assembly | `calculations/certification.py` | `CertificateMetrics` consumed by `routers/certificates.py` |
+| HTTP layer | `backend/app/routers/*.py` | JSON endpoints; compliance routes split into `compliance_blending/_ccts/_bio_carbon` |
+| Airline reports | `backend/app/reports/airline_report.py` | `collect_report_data` (query + format) then `render_pdf` / `render_excel` |
+| Mock data | `backend/app/seed/mock_data.py` | seeded on empty DB (RNG seed 42) |
+
+Design decisions: calculation modules stay free of FastAPI/SQLAlchemy so they can be unit-tested and
+reviewed against the regulations in isolation; routers only translate between HTTP and those functions.
+
+## Regulatory basis
 
 This system implements the following regulatory frameworks as **editable defaults**, not
 hardcoded truth. EU/EASA blending mandates, RED III default GHG values, and ASTM D7566
@@ -67,36 +106,48 @@ extends CCTS to SAF: `GET /api/compliance/ccts-icm/status` reports current cover
 `SAF_SECTOR_NOTIFIED` in `ccts_icm.py` once BEE publishes one. Source:
 https://beeindia.gov.in
 
-## Architecture
+## Repository layout
+| Path | Purpose |
+|---|---|
+| `backend/app/` | FastAPI app: `main.py`, `db.py`, `models.py`, `routers/`, `schemas/`, `calculations/`, `reports/`, `seed/` |
+| `backend/tests/` | pytest suite incl. golden snapshots (`tests/golden/`) of seeded API output and the OpenAPI schema |
+| `frontend/` | React + Vite + Tailwind single-page app, one page per tab |
+| `notebooks/colab_test.ipynb` | Colab smoke notebook |
+| `run_app.sh` | Starts backend and frontend together |
+| `pyproject.toml`, `.github/workflows/ci.yml` | ruff + pytest config; CI runs ruff, pytest and the frontend build |
 
-```
-backend/   FastAPI app (SQLite via SQLAlchemy), flat routers/, mock data seeder
-frontend/  React + Vite + Tailwind, single-page tab navigation
-```
+## Data sources
+| Source | What is taken | Access route | Licence / caveat |
+|---|---|---|---|
+| ICAO CORSIA default LCA values, 8th Ed. (19 Nov 2025) | Core LCA values by pathway/feedstock, 89 gCO2e/MJ baseline | Hard-coded in `calculations/corsia.py` | Check the current ICAO edition before real use |
+| RED III / ReFuelEU | 94 gCO2eq/MJ comparator, yearly mandate shares | Hard-coded in `ghg.py`, `mandate_schedule.py` | Editable defaults; confirm against current Delegated/Implementing Regulations |
+| ASTM D7566 | Approved pathways and max blend ratios | `calculations/astm_pathways.py` | Confirm against the current standard edition |
+| BEE / CCTS | Sector lists, 1 CCC = 1 tCO2e | `calculations/ccts_icm.py` (https://beeindia.gov.in) | SAF not yet a notified sector |
+| UPNEDA bio-carbon calculator | Structure only | `calculations/biocarbon_estimator.py` | Factors are placeholders, not UPNEDA's real values |
 
-See `backend/app/models.py` for the full data model: feedstocks, deliveries, production
-batches, ASTM pathways, SAF certificates, airline offtakes/deliveries, the carbon credit
-ledger, and blending compliance records.
+## Configuration
+| Variable | Default | Meaning |
+|---|---|---|
+| `SAF_DB_PATH` | `backend/saf.db` | SQLite file location |
 
-## Running Locally
+No secrets are required or committed. CORS allows `localhost:5173` and `localhost:3000`.
 
-Requires **Python 3.10+** (uses `X | None` type hints) and **Node 18+**.
-
+## Testing
 ```bash
-./run_app.sh
+python -m venv .venv && source .venv/bin/activate
+pip install -r backend/requirements.txt ruff
+pytest -q          # from the repo root; ruff check .
 ```
+Covers the GHG formula, ASTM conformance, the mandate schedule, CORSIA and CCTS maths, certificate
+assembly, report rendering, a router smoke test on the seeded DB, and golden snapshots proving API output
+is unchanged by refactors. The frontend is verified with `cd frontend && npm ci && npm run build`.
 
-This installs dependencies, starts the backend on `:8000` (Swagger docs at
-`http://localhost:8000/docs`) and the frontend on `:5173`. On first run, the backend seeds
-~12 months of realistic mock data (3 feedstocks, 36 production batches + certificates, 3
-airline offtake contracts, a CORSIA credit ledger, and blending records for 3 airports —
-including one deliberately below its ReFuelEU mandate to demonstrate the compliance flag).
+## Limitations and known issues
+- Mock data and illustrative factors only; not a certified compliance tool.
+- Requires Python 3.10+ (`X | None` annotations are evaluated by FastAPI/Pydantic).
+- SQLAlchemy models use `datetime.utcnow`, which is deprecated in newer Pythons (warning only).
+- `SAF_SECTOR_NOTIFIED` in `ccts_icm.py` must be flipped manually once BEE notifies SAF under CCTS.
+- Bio-carbon per-feedstock factors are order-of-magnitude placeholders.
 
-## Tests
-
-```bash
-cd backend && source .venv/bin/activate && pytest
-```
-
-Covers the GHG intensity formula, ASTM pathway conformance checks, the ReFuelEU mandate
-schedule, and a full router smoke test against the seeded database.
+## Licence
+No licence file yet — all rights reserved.

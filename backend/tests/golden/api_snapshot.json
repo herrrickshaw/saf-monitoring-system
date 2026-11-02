@@ -1,0 +1,957 @@
+{
+ "bio_table": {
+  "note": "Illustrative estimate only, modeled on the UPNEDA Bio Carbon Credit Calculator (online.upneda.in) -- UPNEDA does not publish its real per-feedstock conversion factors; the figures here are placeholder order-of-magnitude values for demonstration, not an official or project-accurate calculation.",
+  "operating_days_per_year": 300,
+  "rows": [
+   {
+    "credit_factor_tco2e_per_tonne": 0.35,
+    "key": "agri_waste",
+    "label": "Agriculture Waste",
+    "reference_capacity_tpd": 200.0,
+    "reference_credit_per_year": 21000.0
+   },
+   {
+    "credit_factor_tco2e_per_tonne": 0.25,
+    "key": "animal_waste",
+    "label": "Animal Waste",
+    "reference_capacity_tpd": 300.0,
+    "reference_credit_per_year": 22500.0
+   },
+   {
+    "credit_factor_tco2e_per_tonne": 0.3,
+    "key": "bagasse",
+    "label": "Bagasse",
+    "reference_capacity_tpd": 200.0,
+    "reference_credit_per_year": 18000.0
+   },
+   {
+    "credit_factor_tco2e_per_tonne": 0.32,
+    "key": "corn_cob",
+    "label": "Corn Cob",
+    "reference_capacity_tpd": 200.0,
+    "reference_credit_per_year": 19200.0
+   },
+   {
+    "credit_factor_tco2e_per_tonne": 0.2,
+    "key": "msw",
+    "label": "Municipal Solid Waste (MSW)",
+    "reference_capacity_tpd": 300.0,
+    "reference_credit_per_year": 18000.0
+   },
+   {
+    "credit_factor_tco2e_per_tonne": 0.33,
+    "key": "napier_grass",
+    "label": "Napier Grass",
+    "reference_capacity_tpd": 150.0,
+    "reference_credit_per_year": 14850.0
+   },
+   {
+    "credit_factor_tco2e_per_tonne": 0.22,
+    "key": "press_mud",
+    "label": "Press Mud",
+    "reference_capacity_tpd": 150.0,
+    "reference_credit_per_year": 9900.0
+   },
+   {
+    "credit_factor_tco2e_per_tonne": 0.85,
+    "key": "used_palm_cooking_oil",
+    "label": "Used/Palm Cooking Oils",
+    "reference_capacity_tpd": 250.0,
+    "reference_credit_per_year": 63750.0
+   },
+   {
+    "credit_factor_tco2e_per_tonne": 0.3,
+    "key": "waste_grains",
+    "label": "Waste Grains",
+    "reference_capacity_tpd": 200.0,
+    "reference_credit_per_year": 18000.0
+   },
+   {
+    "credit_factor_tco2e_per_tonne": 0.25,
+    "key": "other",
+    "label": "Other",
+    "reference_capacity_tpd": 150.0,
+    "reference_credit_per_year": 11250.0
+   }
+  ]
+ },
+ "blending": [
+  {
+   "actual_pct": 3.4,
+   "airport": "EDDF",
+   "compliant": true,
+   "id": 1,
+   "mandate_pct": 2.0,
+   "total_jet_fuel_liters": 500000000.0,
+   "total_saf_liters": 17000000.0,
+   "year": 2026
+  },
+  {
+   "actual_pct": 0.952,
+   "airport": "EGLL",
+   "compliant": false,
+   "id": 2,
+   "mandate_pct": 2.0,
+   "total_jet_fuel_liters": 420000000.0,
+   "total_saf_liters": 4000000.0,
+   "year": 2026
+  },
+  {
+   "actual_pct": 2.5,
+   "airport": "LFPG",
+   "compliant": true,
+   "id": 3,
+   "mandate_pct": 2.0,
+   "total_jet_fuel_liters": 380000000.0,
+   "total_saf_liters": 9500000.0,
+   "year": 2026
+  }
+ ],
+ "certificates": [
+  {
+   "astm_conformant": true,
+   "corsia_core_lca_value": 13.9,
+   "corsia_eligible": true,
+   "corsia_lcef": 13.9,
+   "corsia_reduction_pct": 84.38,
+   "eligible_feedstock": true,
+   "fossil_comparator": 94.0,
+   "ghg_intensity": 13.0,
+   "ghg_savings_pct": 86.17,
+   "id": 1,
+   "production_batch_id": 1
+  },
+  {
+   "astm_conformant": true,
+   "corsia_core_lca_value": 13.9,
+   "corsia_eligible": true,
+   "corsia_lcef": 13.9,
+   "corsia_reduction_pct": 84.38,
+   "eligible_feedstock": true,
+   "fossil_comparator": 94.0,
+   "ghg_intensity": 13.0,
+   "ghg_savings_pct": 86.17,
+   "id": 2,
+   "production_batch_id": 2
+  },
+  {
+   "astm_conformant": true,
+   "corsia_core_lca_value": 13.9,
+   "corsia_eligible": true,
+   "corsia_lcef": 13.9,
+   "corsia_reduction_pct": 84.38,
+   "eligible_feedstock": true,
+   "fossil_comparator": 94.0,
+   "ghg_intensity": 13.0,
+   "ghg_savings_pct": 86.17,
+   "id": 3,
+   "production_batch_id": 3
+  },
+  {
+   "astm_conformant": true,
+   "corsia_core_lca_value": 13.9,
+   "corsia_eligible": true,
+   "corsia_lcef": 13.9,
+   "corsia_reduction_pct": 84.38,
+   "eligible_feedstock": true,
+   "fossil_comparator": 94.0,
+   "ghg_intensity": 13.0,
+   "ghg_savings_pct": 86.17,
+   "id": 4,
+   "production_batch_id": 4
+  },
+  {
+   "astm_conformant": true,
+   "corsia_core_lca_value": 13.9,
+   "corsia_eligible": true,
+   "corsia_lcef": 13.9,
+   "corsia_reduction_pct": 84.38,
+   "eligible_feedstock": true,
+   "fossil_comparator": 94.0,
+   "ghg_intensity": 13.0,
+   "ghg_savings_pct": 86.17,
+   "id": 5,
+   "production_batch_id": 5
+  },
+  {
+   "astm_conformant": true,
+   "corsia_core_lca_value": 13.9,
+   "corsia_eligible": true,
+   "corsia_lcef": 13.9,
+   "corsia_reduction_pct": 84.38,
+   "eligible_feedstock": true,
+   "fossil_comparator": 94.0,
+   "ghg_intensity": 13.0,
+   "ghg_savings_pct": 86.17,
+   "id": 6,
+   "production_batch_id": 6
+  },
+  {
+   "astm_conformant": true,
+   "corsia_core_lca_value": 13.9,
+   "corsia_eligible": true,
+   "corsia_lcef": 13.9,
+   "corsia_reduction_pct": 84.38,
+   "eligible_feedstock": true,
+   "fossil_comparator": 94.0,
+   "ghg_intensity": 13.0,
+   "ghg_savings_pct": 86.17,
+   "id": 7,
+   "production_batch_id": 7
+  },
+  {
+   "astm_conformant": true,
+   "corsia_core_lca_value": 13.9,
+   "corsia_eligible": true,
+   "corsia_lcef": 13.9,
+   "corsia_reduction_pct": 84.38,
+   "eligible_feedstock": true,
+   "fossil_comparator": 94.0,
+   "ghg_intensity": 13.0,
+   "ghg_savings_pct": 86.17,
+   "id": 8,
+   "production_batch_id": 8
+  },
+  {
+   "astm_conformant": true,
+   "corsia_core_lca_value": 13.9,
+   "corsia_eligible": true,
+   "corsia_lcef": 13.9,
+   "corsia_reduction_pct": 84.38,
+   "eligible_feedstock": true,
+   "fossil_comparator": 94.0,
+   "ghg_intensity": 13.0,
+   "ghg_savings_pct": 86.17,
+   "id": 9,
+   "production_batch_id": 9
+  },
+  {
+   "astm_conformant": true,
+   "corsia_core_lca_value": 13.9,
+   "corsia_eligible": true,
+   "corsia_lcef": 13.9,
+   "corsia_reduction_pct": 84.38,
+   "eligible_feedstock": true,
+   "fossil_comparator": 94.0,
+   "ghg_intensity": 13.0,
+   "ghg_savings_pct": 86.17,
+   "id": 10,
+   "production_batch_id": 10
+  },
+  {
+   "astm_conformant": true,
+   "corsia_core_lca_value": 13.9,
+   "corsia_eligible": true,
+   "corsia_lcef": 13.9,
+   "corsia_reduction_pct": 84.38,
+   "eligible_feedstock": true,
+   "fossil_comparator": 94.0,
+   "ghg_intensity": 13.0,
+   "ghg_savings_pct": 86.17,
+   "id": 11,
+   "production_batch_id": 11
+  },
+  {
+   "astm_conformant": true,
+   "corsia_core_lca_value": 13.9,
+   "corsia_eligible": true,
+   "corsia_lcef": 13.9,
+   "corsia_reduction_pct": 84.38,
+   "eligible_feedstock": true,
+   "fossil_comparator": 94.0,
+   "ghg_intensity": 13.0,
+   "ghg_savings_pct": 86.17,
+   "id": 12,
+   "production_batch_id": 12
+  },
+  {
+   "astm_conformant": true,
+   "corsia_core_lca_value": 22.5,
+   "corsia_eligible": true,
+   "corsia_lcef": 22.5,
+   "corsia_reduction_pct": 74.72,
+   "eligible_feedstock": true,
+   "fossil_comparator": 94.0,
+   "ghg_intensity": 16.5,
+   "ghg_savings_pct": 82.45,
+   "id": 13,
+   "production_batch_id": 13
+  },
+  {
+   "astm_conformant": true,
+   "corsia_core_lca_value": 22.5,
+   "corsia_eligible": true,
+   "corsia_lcef": 22.5,
+   "corsia_reduction_pct": 74.72,
+   "eligible_feedstock": true,
+   "fossil_comparator": 94.0,
+   "ghg_intensity": 16.5,
+   "ghg_savings_pct": 82.45,
+   "id": 14,
+   "production_batch_id": 14
+  },
+  {
+   "astm_conformant": true,
+   "corsia_core_lca_value": 22.5,
+   "corsia_eligible": true,
+   "corsia_lcef": 22.5,
+   "corsia_reduction_pct": 74.72,
+   "eligible_feedstock": true,
+   "fossil_comparator": 94.0,
+   "ghg_intensity": 16.5,
+   "ghg_savings_pct": 82.45,
+   "id": 15,
+   "production_batch_id": 15
+  },
+  {
+   "astm_conformant": true,
+   "corsia_core_lca_value": 22.5,
+   "corsia_eligible": true,
+   "corsia_lcef": 22.5,
+   "corsia_reduction_pct": 74.72,
+   "eligible_feedstock": true,
+   "fossil_comparator": 94.0,
+   "ghg_intensity": 16.5,
+   "ghg_savings_pct": 82.45,
+   "id": 16,
+   "production_batch_id": 16
+  },
+  {
+   "astm_conformant": true,
+   "corsia_core_lca_value": 22.5,
+   "corsia_eligible": true,
+   "corsia_lcef": 22.5,
+   "corsia_reduction_pct": 74.72,
+   "eligible_feedstock": true,
+   "fossil_comparator": 94.0,
+   "ghg_intensity": 16.5,
+   "ghg_savings_pct": 82.45,
+   "id": 17,
+   "production_batch_id": 17
+  },
+  {
+   "astm_conformant": true,
+   "corsia_core_lca_value": 22.5,
+   "corsia_eligible": true,
+   "corsia_lcef": 22.5,
+   "corsia_reduction_pct": 74.72,
+   "eligible_feedstock": true,
+   "fossil_comparator": 94.0,
+   "ghg_intensity": 16.5,
+   "ghg_savings_pct": 82.45,
+   "id": 18,
+   "production_batch_id": 18
+  },
+  {
+   "astm_conformant": true,
+   "corsia_core_lca_value": 22.5,
+   "corsia_eligible": true,
+   "corsia_lcef": 22.5,
+   "corsia_reduction_pct": 74.72,
+   "eligible_feedstock": true,
+   "fossil_comparator": 94.0,
+   "ghg_intensity": 16.5,
+   "ghg_savings_pct": 82.45,
+   "id": 19,
+   "production_batch_id": 19
+  },
+  {
+   "astm_conformant": true,
+   "corsia_core_lca_value": 22.5,
+   "corsia_eligible": true,
+   "corsia_lcef": 22.5,
+   "corsia_reduction_pct": 74.72,
+   "eligible_feedstock": true,
+   "fossil_comparator": 94.0,
+   "ghg_intensity": 16.5,
+   "ghg_savings_pct": 82.45,
+   "id": 20,
+   "production_batch_id": 20
+  },
+  {
+   "astm_conformant": true,
+   "corsia_core_lca_value": 22.5,
+   "corsia_eligible": true,
+   "corsia_lcef": 22.5,
+   "corsia_reduction_pct": 74.72,
+   "eligible_feedstock": true,
+   "fossil_comparator": 94.0,
+   "ghg_intensity": 16.5,
+   "ghg_savings_pct": 82.45,
+   "id": 21,
+   "production_batch_id": 21
+  },
+  {
+   "astm_conformant": true,
+   "corsia_core_lca_value": 22.5,
+   "corsia_eligible": true,
+   "corsia_lcef": 22.5,
+   "corsia_reduction_pct": 74.72,
+   "eligible_feedstock": true,
+   "fossil_comparator": 94.0,
+   "ghg_intensity": 16.5,
+   "ghg_savings_pct": 82.45,
+   "id": 22,
+   "production_batch_id": 22
+  },
+  {
+   "astm_conformant": true,
+   "corsia_core_lca_value": 22.5,
+   "corsia_eligible": true,
+   "corsia_lcef": 22.5,
+   "corsia_reduction_pct": 74.72,
+   "eligible_feedstock": true,
+   "fossil_comparator": 94.0,
+   "ghg_intensity": 16.5,
+   "ghg_savings_pct": 82.45,
+   "id": 23,
+   "production_batch_id": 23
+  },
+  {
+   "astm_conformant": true,
+   "corsia_core_lca_value": 22.5,
+   "corsia_eligible": true,
+   "corsia_lcef": 22.5,
+   "corsia_reduction_pct": 74.72,
+   "eligible_feedstock": true,
+   "fossil_comparator": 94.0,
+   "ghg_intensity": 16.5,
+   "ghg_savings_pct": 82.45,
+   "id": 24,
+   "production_batch_id": 24
+  },
+  {
+   "astm_conformant": true,
+   "corsia_core_lca_value": 29.3,
+   "corsia_eligible": true,
+   "corsia_lcef": 29.3,
+   "corsia_reduction_pct": 67.08,
+   "eligible_feedstock": true,
+   "fossil_comparator": 94.0,
+   "ghg_intensity": 21.0,
+   "ghg_savings_pct": 77.66,
+   "id": 25,
+   "production_batch_id": 25
+  },
+  {
+   "astm_conformant": true,
+   "corsia_core_lca_value": 29.3,
+   "corsia_eligible": true,
+   "corsia_lcef": 29.3,
+   "corsia_reduction_pct": 67.08,
+   "eligible_feedstock": true,
+   "fossil_comparator": 94.0,
+   "ghg_intensity": 21.0,
+   "ghg_savings_pct": 77.66,
+   "id": 26,
+   "production_batch_id": 26
+  },
+  {
+   "astm_conformant": true,
+   "corsia_core_lca_value": 29.3,
+   "corsia_eligible": true,
+   "corsia_lcef": 29.3,
+   "corsia_reduction_pct": 67.08,
+   "eligible_feedstock": true,
+   "fossil_comparator": 94.0,
+   "ghg_intensity": 21.0,
+   "ghg_savings_pct": 77.66,
+   "id": 27,
+   "production_batch_id": 27
+  },
+  {
+   "astm_conformant": true,
+   "corsia_core_lca_value": 29.3,
+   "corsia_eligible": true,
+   "corsia_lcef": 29.3,
+   "corsia_reduction_pct": 67.08,
+   "eligible_feedstock": true,
+   "fossil_comparator": 94.0,
+   "ghg_intensity": 21.0,
+   "ghg_savings_pct": 77.66,
+   "id": 28,
+   "production_batch_id": 28
+  },
+  {
+   "astm_conformant": true,
+   "corsia_core_lca_value": 29.3,
+   "corsia_eligible": true,
+   "corsia_lcef": 29.3,
+   "corsia_reduction_pct": 67.08,
+   "eligible_feedstock": true,
+   "fossil_comparator": 94.0,
+   "ghg_intensity": 21.0,
+   "ghg_savings_pct": 77.66,
+   "id": 29,
+   "production_batch_id": 29
+  },
+  {
+   "astm_conformant": true,
+   "corsia_core_lca_value": 29.3,
+   "corsia_eligible": true,
+   "corsia_lcef": 29.3,
+   "corsia_reduction_pct": 67.08,
+   "eligible_feedstock": true,
+   "fossil_comparator": 94.0,
+   "ghg_intensity": 21.0,
+   "ghg_savings_pct": 77.66,
+   "id": 30,
+   "production_batch_id": 30
+  },
+  {
+   "astm_conformant": true,
+   "corsia_core_lca_value": 29.3,
+   "corsia_eligible": true,
+   "corsia_lcef": 29.3,
+   "corsia_reduction_pct": 67.08,
+   "eligible_feedstock": true,
+   "fossil_comparator": 94.0,
+   "ghg_intensity": 21.0,
+   "ghg_savings_pct": 77.66,
+   "id": 31,
+   "production_batch_id": 31
+  },
+  {
+   "astm_conformant": true,
+   "corsia_core_lca_value": 29.3,
+   "corsia_eligible": true,
+   "corsia_lcef": 29.3,
+   "corsia_reduction_pct": 67.08,
+   "eligible_feedstock": true,
+   "fossil_comparator": 94.0,
+   "ghg_intensity": 21.0,
+   "ghg_savings_pct": 77.66,
+   "id": 32,
+   "production_batch_id": 32
+  },
+  {
+   "astm_conformant": true,
+   "corsia_core_lca_value": 29.3,
+   "corsia_eligible": true,
+   "corsia_lcef": 29.3,
+   "corsia_reduction_pct": 67.08,
+   "eligible_feedstock": true,
+   "fossil_comparator": 94.0,
+   "ghg_intensity": 21.0,
+   "ghg_savings_pct": 77.66,
+   "id": 33,
+   "production_batch_id": 33
+  },
+  {
+   "astm_conformant": true,
+   "corsia_core_lca_value": 29.3,
+   "corsia_eligible": true,
+   "corsia_lcef": 29.3,
+   "corsia_reduction_pct": 67.08,
+   "eligible_feedstock": true,
+   "fossil_comparator": 94.0,
+   "ghg_intensity": 21.0,
+   "ghg_savings_pct": 77.66,
+   "id": 34,
+   "production_batch_id": 34
+  },
+  {
+   "astm_conformant": true,
+   "corsia_core_lca_value": 29.3,
+   "corsia_eligible": true,
+   "corsia_lcef": 29.3,
+   "corsia_reduction_pct": 67.08,
+   "eligible_feedstock": true,
+   "fossil_comparator": 94.0,
+   "ghg_intensity": 21.0,
+   "ghg_savings_pct": 77.66,
+   "id": 35,
+   "production_batch_id": 35
+  },
+  {
+   "astm_conformant": true,
+   "corsia_core_lca_value": 29.3,
+   "corsia_eligible": true,
+   "corsia_lcef": 29.3,
+   "corsia_reduction_pct": 67.08,
+   "eligible_feedstock": true,
+   "fossil_comparator": 94.0,
+   "ghg_intensity": 21.0,
+   "ghg_savings_pct": 77.66,
+   "id": 36,
+   "production_batch_id": 36
+  }
+ ],
+ "excel_disposition": "attachment; filename=\"Lufthansa Group_SAF",
+ "excel_rows_no_date": [
+  [
+   "SAF Supply Report \u2014 Lufthansa Group",
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null
+  ],
+  [
+   "Delivery Date",
+   "Batch Code",
+   "Feedstock",
+   "ASTM Pathway",
+   "Blend Ratio",
+   "Volume",
+   "RED III GHG Intensity (gCO2eq/MJ)",
+   "RED III GHG Savings %",
+   "CORSIA Reduction %",
+   "tCO2e Credited (CORSIA)"
+  ],
+  [
+   "HEFA-SPK-1-202511",
+   "Used Cooking Oil",
+   "HEFA-SPK",
+   "41.0%",
+   "747,825 L",
+   "13.0",
+   "86.2%",
+   "84.4%",
+   "1853.34"
+  ],
+  [
+   "HEFA-SPK-1-202602",
+   "Used Cooking Oil",
+   "HEFA-SPK",
+   "43.0%",
+   "640,175 L",
+   "13.0",
+   "86.2%",
+   "84.4%",
+   "1586.55"
+  ],
+  [
+   "HEFA-SPK-1-202605",
+   "Used Cooking Oil",
+   "HEFA-SPK",
+   "43.8%",
+   "669,438 L",
+   "13.0",
+   "86.2%",
+   "84.4%",
+   "1659.07"
+  ],
+  [
+   "HEFA-SPK-1-202608",
+   "Used Cooking Oil",
+   "HEFA-SPK",
+   "40.1%",
+   "564,832 L",
+   "13.0",
+   "86.2%",
+   "84.4%",
+   "1399.82"
+  ],
+  [
+   "HEFA-SPK-2-202511",
+   "Animal Fat (Tallow)",
+   "HEFA-SPK",
+   "30.5%",
+   "720,006 L",
+   "16.5",
+   "82.5%",
+   "74.7%",
+   "1580.05"
+  ],
+  [
+   "HEFA-SPK-2-202602",
+   "Animal Fat (Tallow)",
+   "HEFA-SPK",
+   "41.2%",
+   "656,804 L",
+   "16.5",
+   "82.5%",
+   "74.7%",
+   "1441.36"
+  ],
+  [
+   "HEFA-SPK-2-202605",
+   "Animal Fat (Tallow)",
+   "HEFA-SPK",
+   "44.9%",
+   "695,522 L",
+   "16.5",
+   "82.5%",
+   "74.7%",
+   "1526.32"
+  ],
+  [
+   "HEFA-SPK-2-202608",
+   "Animal Fat (Tallow)",
+   "HEFA-SPK",
+   "37.6%",
+   "513,019 L",
+   "16.5",
+   "82.5%",
+   "74.7%",
+   "1125.82"
+  ],
+  [
+   "ATJ-SPK-3-202511",
+   "Corn Stover Residue",
+   "ATJ-SPK",
+   "43.2%",
+   "538,839 L",
+   "21.0",
+   "77.7%",
+   "67.1%",
+   "1061.57"
+  ],
+  [
+   "ATJ-SPK-3-202602",
+   "Corn Stover Residue",
+   "ATJ-SPK",
+   "36.0%",
+   "955,204 L",
+   "21.0",
+   "77.7%",
+   "67.1%",
+   "1881.85"
+  ],
+  [
+   "ATJ-SPK-3-202605",
+   "Corn Stover Residue",
+   "ATJ-SPK",
+   "31.1%",
+   "752,994 L",
+   "21.0",
+   "77.7%",
+   "67.1%",
+   "1483.47"
+  ],
+  [
+   "ATJ-SPK-3-202608",
+   "Corn Stover Residue",
+   "ATJ-SPK",
+   "37.0%",
+   "511,566 L",
+   "21.0",
+   "77.7%",
+   "67.1%",
+   "1007.84"
+  ]
+ ],
+ "ledger": [
+  {
+   "airline_delivery_id": 1,
+   "id": 1,
+   "status": "calculated",
+   "tco2e_saved": 1853.335
+  },
+  {
+   "airline_delivery_id": 2,
+   "id": 2,
+   "status": "calculated",
+   "tco2e_saved": 2366.112
+  },
+  {
+   "airline_delivery_id": 3,
+   "id": 3,
+   "status": "calculated",
+   "tco2e_saved": 1724.929
+  },
+  {
+   "airline_delivery_id": 4,
+   "id": 4,
+   "status": "calculated",
+   "tco2e_saved": 1586.546
+  },
+  {
+   "airline_delivery_id": 5,
+   "id": 5,
+   "status": "calculated",
+   "tco2e_saved": 2967.69
+  },
+  {
+   "airline_delivery_id": 6,
+   "id": 6,
+   "status": "calculated",
+   "tco2e_saved": 2952.595
+  },
+  {
+   "airline_delivery_id": 7,
+   "id": 7,
+   "status": "calculated",
+   "tco2e_saved": 1659.068
+  },
+  {
+   "airline_delivery_id": 8,
+   "id": 8,
+   "status": "calculated",
+   "tco2e_saved": 1242.518
+  },
+  {
+   "airline_delivery_id": 9,
+   "id": 9,
+   "status": "calculated",
+   "tco2e_saved": 2624.723
+  },
+  {
+   "airline_delivery_id": 10,
+   "id": 10,
+   "status": "calculated",
+   "tco2e_saved": 1399.823
+  },
+  {
+   "airline_delivery_id": 11,
+   "id": 11,
+   "status": "calculated",
+   "tco2e_saved": 1963.587
+  },
+  {
+   "airline_delivery_id": 12,
+   "id": 12,
+   "status": "calculated",
+   "tco2e_saved": 1919.994
+  },
+  {
+   "airline_delivery_id": 13,
+   "id": 13,
+   "status": "calculated",
+   "tco2e_saved": 1580.053
+  },
+  {
+   "airline_delivery_id": 14,
+   "id": 14,
+   "status": "calculated",
+   "tco2e_saved": 1520.859
+  },
+  {
+   "airline_delivery_id": 15,
+   "id": 15,
+   "status": "calculated",
+   "tco2e_saved": 2363.542
+  },
+  {
+   "airline_delivery_id": 16,
+   "id": 16,
+   "status": "calculated",
+   "tco2e_saved": 1441.356
+  },
+  {
+   "airline_delivery_id": 17,
+   "id": 17,
+   "status": "calculated",
+   "tco2e_saved": 2006.488
+  },
+  {
+   "airline_delivery_id": 18,
+   "id": 18,
+   "status": "calculated",
+   "tco2e_saved": 1417.241
+  },
+  {
+   "airline_delivery_id": 19,
+   "id": 19,
+   "status": "calculated",
+   "tco2e_saved": 1526.323
+  },
+  {
+   "airline_delivery_id": 20,
+   "id": 20,
+   "status": "calculated",
+   "tco2e_saved": 1832.094
+  },
+  {
+   "airline_delivery_id": 21,
+   "id": 21,
+   "status": "calculated",
+   "tco2e_saved": 1697.505
+  },
+  {
+   "airline_delivery_id": 22,
+   "id": 22,
+   "status": "calculated",
+   "tco2e_saved": 1125.82
+  },
+  {
+   "airline_delivery_id": 23,
+   "id": 23,
+   "status": "calculated",
+   "tco2e_saved": 998.462
+  },
+  {
+   "airline_delivery_id": 24,
+   "id": 24,
+   "status": "calculated",
+   "tco2e_saved": 2631.399
+  },
+  {
+   "airline_delivery_id": 25,
+   "id": 25,
+   "status": "calculated",
+   "tco2e_saved": 1061.567
+  },
+  {
+   "airline_delivery_id": 26,
+   "id": 26,
+   "status": "calculated",
+   "tco2e_saved": 3003.802
+  },
+  {
+   "airline_delivery_id": 27,
+   "id": 27,
+   "status": "calculated",
+   "tco2e_saved": 1068.273
+  },
+  {
+   "airline_delivery_id": 28,
+   "id": 28,
+   "status": "calculated",
+   "tco2e_saved": 1881.847
+  },
+  {
+   "airline_delivery_id": 29,
+   "id": 29,
+   "status": "calculated",
+   "tco2e_saved": 1582.53
+  },
+  {
+   "airline_delivery_id": 30,
+   "id": 30,
+   "status": "calculated",
+   "tco2e_saved": 746.29
+  },
+  {
+   "airline_delivery_id": 31,
+   "id": 31,
+   "status": "calculated",
+   "tco2e_saved": 1483.473
+  },
+  {
+   "airline_delivery_id": 32,
+   "id": 32,
+   "status": "calculated",
+   "tco2e_saved": 1394.884
+  },
+  {
+   "airline_delivery_id": 33,
+   "id": 33,
+   "status": "calculated",
+   "tco2e_saved": 1795.063
+  },
+  {
+   "airline_delivery_id": 34,
+   "id": 34,
+   "status": "calculated",
+   "tco2e_saved": 1007.836
+  },
+  {
+   "airline_delivery_id": 35,
+   "id": 35,
+   "status": "calculated",
+   "tco2e_saved": 1486.624
+  },
+  {
+   "airline_delivery_id": 36,
+   "id": 36,
+   "status": "calculated",
+   "tco2e_saved": 2237.013
+  }
+ ]
+}
