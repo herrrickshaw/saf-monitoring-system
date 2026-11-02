@@ -1,9 +1,8 @@
 import io
 from datetime import date
 
-from openpyxl import load_workbook
-
 from app.reports.airline_report import HEADERS, ReportData, render_excel, render_pdf
+from openpyxl import load_workbook
 
 DATA = ReportData(
     title="SAF Supply Report — Test Air", airport="EDDF", start=date(2026, 1, 1), end=date(2026, 12, 31),

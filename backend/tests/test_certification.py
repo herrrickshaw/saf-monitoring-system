@@ -1,5 +1,4 @@
 import pytest
-
 from app.calculations.certification import MissingCorsiaDefault, compute_certificate_metrics
 
 BASE = dict(
