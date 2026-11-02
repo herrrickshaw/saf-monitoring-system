@@ -37,3 +37,10 @@ def snapshot(client) -> dict:
 def test_api_output_matches_pre_refactor_snapshot(client):
     expected = json.loads(GOLDEN.read_text())
     assert json.loads(json.dumps(snapshot(client), default=str)) == expected
+
+
+def test_openapi_contract_unchanged():
+    from app.main import app
+
+    expected = json.loads((Path(__file__).parent / "golden" / "openapi.json").read_text())
+    assert json.loads(json.dumps(app.openapi(), sort_keys=True)) == expected
