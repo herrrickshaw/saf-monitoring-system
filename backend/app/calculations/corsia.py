@@ -14,8 +14,11 @@ Methodology (Section 3.1 of the ICAO document):
 
 Wastes, residues, and by-products are assigned a default ILUC value of zero
 (Section 5.2); only feedstocks classified as main/primary products carry a
-non-zero default ILUC value (Section 5.3, Tables 7-12 -- not reproduced here
-since this system's default feedstocks are all waste/residue/by-product).
+non-zero default ILUC value (Section 5.3, Tables 7-12). The seeded demo
+feedstocks are all waste/residue/by-product, but the core-value table below also
+carries crop pathways, so DEFAULT_ILUC_VALUES holds the Global ILUC defaults for
+the crop rows that could be verified, and a crop row without one must be given
+an explicit ILUC value -- it is never silently treated as zero.
 
 The CORSIA baseline life cycle emissions value for conventional (fossil) jet
 fuel is 89 gCO2e/MJ (used directly in the co-processing equations in Section
@@ -84,6 +87,52 @@ DEFAULT_CORE_LCA_VALUES = {
     ("SIP", "sugarcane"): 32.8,
     ("SIP", "sugar_beet"): 32.4,
 }
+
+
+# Default ILUC values (gCO2e/MJ), Global column, keyed by feedstock key (crop keys
+# are unique across pathways). Read from ISCC CORSIA 205 "Life Cycle Emissions"
+# v2.0, which reproduces ICAO's default tables as core / ILUC / total columns.
+# Regional values (e.g. corn grain USA: ETJ 25.1, isobutanol 22.1) may be entered
+# per feedstock via Feedstock.corsia_iluc_value, which overrides these.
+DEFAULT_ILUC_VALUES = {
+    "soybean_oilseed": 25.8,
+    "palm_ffb_high_biogas_capture": 39.1,       # Malaysia/Indonesia
+    "palm_ffb_low_biogas_capture": 39.1,
+    "jatropha_oilseed_meal_fertilizer": -24.8,  # India
+    "jatropha_oilseed_meal_feed": -48.1,        # India
+    "sugarcane_isobutanol": 9.1,
+    "molasses_isobutanol": 9.1,
+    "miscanthus_isobutanol": -14.5,
+    "switchgrass_isobutanol": 5.4,
+    "corn_grain_isobutanol": 29.7,
+    "sugarcane_ethanol_integrated": 8.5,
+    "corn_grain_ethanol": 34.9,
+}
+
+# Crop (main-product) keys that carry a non-zero ICAO ILUC value which this
+# repo has not verified: certificates for these require an explicit ILUC.
+CROP_KEYS_WITHOUT_DEFAULT_ILUC = {
+    "poplar", "miscanthus", "switchgrass",                   # FT-SPK energy crops
+    "rapeseed_canola_oilseed", "brassica_carinata_oilseed", "camelina_oilseed",
+    "sugarcane", "sugar_beet",                               # SIP
+}
+
+
+def default_iluc_value(pathway_code: str, feedstock_key: str) -> float | None:
+    """Published Global default ILUC for a crop key, 0.0 for wastes/residues/
+    by-products, None for a crop key with no verified default here."""
+    if feedstock_key in CROP_KEYS_WITHOUT_DEFAULT_ILUC:
+        return None
+    return DEFAULT_ILUC_VALUES.get(feedstock_key, 0.0)
+
+
+def resolve_iluc(pathway_code: str, feedstock_key: str, supplied: float = 0.0) -> float | None:
+    """ILUC to use for a certificate: an explicitly supplied non-zero value wins
+    (regional value); otherwise the published default. No crop has a published
+    ILUC of exactly zero, so 0.0 is treated as "not supplied"."""
+    if supplied:
+        return supplied
+    return default_iluc_value(pathway_code, feedstock_key)
 
 
 def default_core_lca_value(pathway_code: str, feedstock_key: str) -> float | None:
