@@ -1,7 +1,9 @@
 """ASTM D7566 approved SAF conversion pathways and their certified max blend ratios
 with conventional Jet A-1. Values are illustrative defaults from the published
-Annexes as of the D7566-23 revision -- reconcile against the current standard
-edition before real compliance use, as ASTM periodically adds pathways/annexes.
+Annexes as of the D7566-23a revision (Annex A8, ATJ-SKA, was added in July 2023) --
+reconcile against the current standard edition before real compliance use, as ASTM
+periodically adds pathways/annexes and revises blend limits. Co-processing is not a
+D7566 annex: it is governed by ASTM D1655 (conventional Jet A/A-1).
 """
 
 PATHWAYS = [
@@ -19,9 +21,9 @@ PATHWAYS = [
      "description": "Catalytic Hydrothermolysis Jet fuel"},
     {"code": "HC-HEFA-SPK", "annex": "Annex A7", "max_blend_pct": 10.0,
      "description": "Hydrocarbon-HEFA SPK (algae-derived)"},
-    {"code": "HFS-SIP", "annex": "Annex A8", "max_blend_pct": 10.0,
-     "description": "Hydroprocessed Fermented Sugars to Synthesized Iso-Paraffins"},
-    {"code": "Co-processed HEFA/FT", "annex": "Annex A2/A1 co-processing", "max_blend_pct": 5.0,
+    {"code": "ATJ-SKA", "annex": "Annex A8", "max_blend_pct": 50.0,
+     "description": "Alcohol-to-Jet Synthetic Kerosene with Aromatics"},
+    {"code": "Co-processed HEFA/FT", "annex": "ASTM D1655 (co-processing, not a D7566 annex)", "max_blend_pct": 5.0,
      "description": "Co-processing of hydrotreated esters/FT feed in a conventional refinery"},
 ]
 
