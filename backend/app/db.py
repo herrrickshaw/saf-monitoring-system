@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import os
 from pathlib import Path
 
@@ -19,3 +21,11 @@ def get_db():
         yield db
     finally:
         db.close()
+
+
+def persist(db, obj):
+    """Add *obj* to the session, commit, refresh it and return it."""
+    db.add(obj)
+    db.commit()
+    db.refresh(obj)
+    return obj

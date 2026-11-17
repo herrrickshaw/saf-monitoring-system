@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from ..calculations.corsia import CORSIA_MIN_REDUCTION_PCT, credit_for_delivery
-from ..db import get_db
+from ..db import get_db, persist
 from ..models import AirlineDelivery, CarbonCreditLedger
 from ..schemas.carbon_credits import CarbonCreditLedgerOut
 
@@ -33,10 +33,7 @@ def generate_ledger_entry(airline_delivery_id: int, db: Session = Depends(get_db
 
     tco2e = credit_for_delivery(delivery.volume_liters, certificate.corsia_lcef)
     entry = CarbonCreditLedger(airline_delivery_id=delivery.id, tco2e_saved=tco2e)
-    db.add(entry)
-    db.commit()
-    db.refresh(entry)
-    return entry
+    return persist(db, entry)
 
 
 @router.post("/{ledger_id}/report", response_model=CarbonCreditLedgerOut)

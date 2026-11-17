@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from ..db import get_db
+from ..db import get_db, persist
 from ..models import ASTMPathway, FeedstockDelivery, ProductionBatch
 from ..schemas.production import ASTMPathwayOut, ProductionBatchCreate, ProductionBatchOut
 
@@ -25,7 +25,4 @@ def create_batch(payload: ProductionBatchCreate, db: Session = Depends(get_db)):
     if not db.get(FeedstockDelivery, payload.feedstock_delivery_id):
         raise HTTPException(404, "Feedstock delivery not found")
     batch = ProductionBatch(**payload.model_dump())
-    db.add(batch)
-    db.commit()
-    db.refresh(batch)
-    return batch
+    return persist(db, batch)

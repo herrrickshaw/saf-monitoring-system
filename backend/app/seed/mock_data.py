@@ -13,9 +13,9 @@ from ..calculations.astm_pathways import PATHWAYS, is_conformant
 from ..calculations.corsia import credit_for_delivery, default_core_lca_value, is_corsia_eligible, lcef, reduction_pct
 from ..calculations.ghg import FOSSIL_COMPARATOR_GCO2_PER_MJ, ghg_intensity, ghg_savings_pct
 from ..models import (
-    ASTMPathway,
     AirlineDelivery,
     AirlineOfftake,
+    ASTMPathway,
     BlendingRecord,
     CarbonCreditLedger,
     Feedstock,

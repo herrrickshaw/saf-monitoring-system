@@ -1,5 +1,4 @@
 import pytest
-
 from app.calculations.corsia import (
     CORSIA_BASELINE_GCO2_PER_MJ,
     default_core_lca_value,
