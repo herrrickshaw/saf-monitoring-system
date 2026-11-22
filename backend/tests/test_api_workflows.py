@@ -534,3 +534,12 @@ def test_ccts_estimate_zero_difference_is_a_surplus_of_zero(client):
                           "target_intensity_tco2e_per_unit": 1.0, "output_units": 0.0005}).json()  # fmt: skip
     assert deficit["surplus_deficit_tco2e"] == -0.001  # rounded to 3 dp
     assert deficit["is_surplus"] is False and deficit["ccc_equivalent"] == 0.001
+
+
+def test_dashboard_average_is_rounded_to_two_decimals(empty_client):
+    today = date.today()
+    _blend(empty_client, "R1", today.year, 3.0, 1.0)  # actual_pct 33.333
+    _blend(empty_client, "R2", today.year, 100.0, 0.0)  # actual_pct 0.0
+    got = empty_client.get("/api/dashboard/summary").json()["current_year_blending_pct"]
+    assert got == round((33.333 + 0.0) / 2, 2)
+    assert got != round((33.333 + 0.0) / 2, 1) and got != round((33.333 + 0.0) / 2, 3)
