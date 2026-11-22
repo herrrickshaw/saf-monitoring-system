@@ -245,14 +245,14 @@ def _sheet_rows(content):
 
 def test_excel_report_period_is_inclusive_and_rows_formatted(client):
     cert_batch = make_batch(client, blend=40.0)
-    assert client.post(f"/api/certificates/generate/{cert_batch}").status_code == 200
+    cert = client.post(f"/api/certificates/generate/{cert_batch}").json()
     bare_batch = make_batch(client)  # no certificate -> n/a columns
     oid = make_offtake(client, name="Excel Air", airport="LEMD")
     make_delivery(client, oid, cert_batch, "2026-02-28", 111.0)
     d_start = make_delivery(client, oid, cert_batch, "2026-03-01", 1000.0)
     make_delivery(client, oid, bare_batch, "2026-03-31", 2500.0)
     make_delivery(client, oid, cert_batch, "2026-04-01", 333.0)
-    assert client.post(f"/api/carbon-credits/generate/{d_start}").status_code == 200
+    entry = client.post(f"/api/carbon-credits/generate/{d_start}").json()
 
     r = client.get(f"/api/airlines/{oid}/report", params={"start": "2026-03-01", "end": "2026-03-31", "fmt": "excel"})
     assert r.status_code == 200
@@ -270,9 +270,10 @@ def test_excel_report_period_is_inclusive_and_rows_formatted(client):
     assert [row[0] for row in data] == ["2026-03-01", "2026-03-31"]  # start and end inclusive, others out
     full, bare = data
     assert full[5] == "1,000 L" and full[4] == "40.0%"
-    assert full[6] != "n/a" and full[6].replace(".", "").isdigit()
-    assert full[7].endswith("%") and full[8].endswith("%")
-    assert full[9] != "n/a"  # ledger entry exists for this delivery
+    assert full[6] == f"{cert['ghg_intensity']:.1f}"
+    assert full[7] == f"{cert['ghg_savings_pct']:.1f}%"
+    assert full[8] == f"{cert['corsia_reduction_pct']:.1f}%"
+    assert full[9] == f"{entry['tco2e_saved']:.2f}"
     assert bare[5] == "2,500 L"
     assert bare[6:] == ["n/a", "n/a", "n/a", "n/a"]
 
