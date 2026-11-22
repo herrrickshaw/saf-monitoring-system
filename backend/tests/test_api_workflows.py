@@ -86,7 +86,7 @@ def _uid():
 
 
 def make_batch(client, *, key="used_cooking_oil", pathway="HEFA-SPK", iluc=0.0, category="IX-B",
-               blend=40.0, volume=30000.0, lab="LAB-X"):  # fmt: skip
+               blend=40.0, volume=30000.0, lab="LAB-X", ep=0.0):  # fmt: skip
     n = _uid()
     fid = client.post("/api/feedstock", json={"name": f"fs{n}", "category": category, "supplier": "S",
                       "default_eec": 1.0, "default_ep": 10.0, "default_etd": 2.0,
@@ -98,7 +98,8 @@ def make_batch(client, *, key="used_cooking_oil", pathway="HEFA-SPK", iluc=0.0, 
     r = client.post("/api/production/batches", json={"batch_code": f"WF-{n}", "start_date": "2026-01-06",
                     "end_date": "2026-01-07", "astm_pathway_id": pid, "feedstock_delivery_id": did,
                     "feedstock_input_tonnes": 100.0, "saf_output_liters": volume,
-                    "blend_ratio_pct": blend, "lab_certification_ref": lab})  # fmt: skip
+                    "blend_ratio_pct": blend, "lab_certification_ref": lab,
+                    "process_emissions_ep": ep})  # fmt: skip
     assert r.status_code == 200, r.text
     return r.json()["id"]
 
@@ -493,3 +494,43 @@ def test_dashboard_sums_batches_and_credits(client):
     assert after["total_tco2e_credited"] == pytest.approx(before["total_tco2e_credited"] + entry["tco2e_saved"])
     assert after["active_contracts"] == before["active_contracts"] + 1
     assert cert["corsia_eligible"] is True
+
+
+# ---- certificates / compliance estimate (field-level checks) ---------------------------------------------
+
+
+def test_certificate_uses_batch_process_emissions_over_feedstock_default(client):
+    from app.calculations.ghg import FOSSIL_COMPARATOR_GCO2_PER_MJ, ghg_savings_pct
+
+    bid = make_batch(client, ep=20.0)  # feedstock default_ep is 10.0 in make_batch
+    cert = client.post(f"/api/certificates/generate/{bid}").json()
+    assert cert["ghg_intensity"] == 1.0 + 0.0 + 20.0 + 2.0  # eec + el + batch ep + etd
+    assert cert["ghg_savings_pct"] == ghg_savings_pct(23.0)
+    assert cert["fossil_comparator"] == FOSSIL_COMPARATOR_GCO2_PER_MJ
+    default = client.post(f"/api/certificates/generate/{make_batch(client)}").json()
+    assert default["ghg_intensity"] == 1.0 + 10.0 + 2.0  # unset batch ep falls back to the feedstock default
+
+
+def test_certificate_flags_follow_feedstock_category_and_blend(client):
+    ok = client.post(f"/api/certificates/generate/{make_batch(client, category='IX-B')}").json()
+    assert ok["eligible_feedstock"] is True and ok["astm_conformant"] is True
+    crop = client.post(
+        f"/api/certificates/generate/{make_batch(client, key='corn_grain_ethanol', pathway='ATJ-SPK', category='CROP', iluc=5.0)}"
+    ).json()
+    assert crop["eligible_feedstock"] is False
+    over = client.post(f"/api/certificates/generate/{make_batch(client, blend=99.0)}").json()
+    assert over["astm_conformant"] is False  # blend above the pathway maximum
+    nolab = client.post(f"/api/certificates/generate/{make_batch(client, lab='')}").json()
+    assert nolab["astm_conformant"] is False  # no lab certification reference recorded
+
+
+def test_ccts_estimate_zero_difference_is_a_surplus_of_zero(client):
+    r = client.post("/api/compliance/ccts-icm/estimate", json={"actual_intensity_tco2e_per_unit": 1.5,
+                    "target_intensity_tco2e_per_unit": 1.5, "output_units": 1000.0})  # fmt: skip
+    body = r.json()
+    assert body["surplus_deficit_tco2e"] == 0.0 and body["ccc_equivalent"] == 0.0
+    assert body["is_surplus"] is True
+    deficit = client.post("/api/compliance/ccts-icm/estimate", json={"actual_intensity_tco2e_per_unit": 2.0,
+                          "target_intensity_tco2e_per_unit": 1.0, "output_units": 0.0005}).json()  # fmt: skip
+    assert deficit["surplus_deficit_tco2e"] == -0.001  # rounded to 3 dp
+    assert deficit["is_surplus"] is False and deficit["ccc_equivalent"] == 0.001
