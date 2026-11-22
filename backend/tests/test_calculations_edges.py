@@ -228,3 +228,35 @@ def test_seed_is_idempotent_and_internally_consistent(tmp_path):
             assert entry.tco2e_saved == corsia.credit_for_delivery(d.volume_liters, d.batch.certificate.corsia_lcef)
             assert d.volume_liters <= d.batch.saf_output_liters
             assert d.delivery_date == d.batch.end_date
+
+
+# ---- db path configuration (fresh interpreter: app.db binds its engine at import) ----------------------------
+
+
+def _db_path_in_subprocess(env_value):
+    import subprocess
+    import sys
+    from pathlib import Path
+
+    backend = Path(__file__).resolve().parent.parent
+    env = {k: v for k, v in os.environ.items() if k != "SAF_DB_PATH"}
+    if env_value is not None:
+        env["SAF_DB_PATH"] = env_value
+    out = subprocess.run(
+        [sys.executable, "-c", "from app.db import DB_PATH, engine; print(DB_PATH); print(engine.url)"],
+        cwd=backend, env=env, capture_output=True, text=True, check=True,
+    )  # fmt: skip
+    return backend, out.stdout.split("\n")[:2]
+
+
+def test_db_path_comes_from_env_var(tmp_path):
+    target = str(tmp_path / "custom.db")
+    _, (db_path, url) = _db_path_in_subprocess(target)
+    assert db_path == target
+    assert url == f"sqlite:///{target}"
+
+
+def test_db_path_defaults_to_backend_saf_db():
+    backend, (db_path, url) = _db_path_in_subprocess(None)
+    assert db_path == str(backend / "saf.db")
+    assert url == f"sqlite:///{backend / 'saf.db'}"
