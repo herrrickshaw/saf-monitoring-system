@@ -39,11 +39,19 @@ jobs:
       - name: Install
         run: |
           python -m pip install -U pip
-          pip install pytest
+          pip install pytest pytest-cov fastapi httpx "sqlalchemy>=2.0.29" "pydantic>=2.6.0" python-dateutil reportlab openpyxl
       - name: Import every module (offline)
         run: python .github/scripts/import_all.py
-      - name: Tests
-        run: echo 'no tests/ directory yet' >> "$GITHUB_STEP_SUMMARY"
+      - name: Tests (backend/tests, source coverage)
+        working-directory: backend
+        run: pytest -q --cov=app --cov-report=xml
+      - name: Upload coverage to Codecov
+        if: matrix.python == '3.12'
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: backend/coverage.xml
+          fail_ci_if_error: false
 
   lint:
     name: ruff + pip-audit
